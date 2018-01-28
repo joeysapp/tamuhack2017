@@ -26,9 +26,8 @@ ProjectParameters, Point, Extent, webMercatorUtils, SimpleMarkerSymbol, TextSymb
 
 	var latLongSR = new SpatialReference(4326);
 	var xySR = esriMap.spatialReference;
-
-	// JOEY LOOK AT THIS
-	function addMarker(longitude,latitude,name) {
+	
+	function addMarker(longitude,latitude,name,placeid) {
 		var merc = webMercatorUtils.lngLatToXY(longitude,latitude);
 		var x = merc[0];
 		var y = merc[1];
@@ -39,33 +38,23 @@ ProjectParameters, Point, Extent, webMercatorUtils, SimpleMarkerSymbol, TextSymb
 		place.name = name;
 		place.x = x;
 		place.y = y;
+		place.placeid = placeid;
 		if(!p_set.has(place.name)) {
 				// INTERNAL BOOKKEEPING
-				//place.id = this_id;
-				//id_map[place.name] = this_id;
-				//this_id++;
 				p_set.add(place.name);
 				places.push(place);
-				
+
 				// ADD GRAPHICAL MARKER
 				var g_attr = {"p_id": place.id, "p_name":place.name};
 				var mk_point = new Point(x,y,esriMap.spatialReference);
 				esriMap.graphics.add(new Graphic(mk_point,markerSymbol,g_attr));
 				var label = new TextSymbol(name[0],labelFont,textColor).setOffset(0,-4.5).setAlign(TextSymbol.ALIGN_MIDDLE);
 				esriMap.graphics.add(new Graphic(mk_point,label,g_attr));
-				
-				// PUSH BLOCK TO TIMELINE
-				append_block(place);
-				//console.log(map.graphics.graphics);
-				//console.log(map.graphics.graphics.length);
-				
-				//update_text();
 			}
 	}
-	
 
 	$("#wrp_add").on("click", function() {
-		addMarker(wrp_lng,wrp_lat,wrp_name);
+		addMarker(wrp_lng,wrp_lat,wrp_name,wrp_placeid);
 	});
 
 	var austin = new SpatialReference(102100);
