@@ -1,2 +1,2 @@
 # trip_planner 
-Trip planning using arcgis and Google Maps popularity metrics
+Trip planning using ArcGIS esri and Google Maps popularity metrics

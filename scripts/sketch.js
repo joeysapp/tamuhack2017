@@ -1,5 +1,5 @@
 var canvas, timeline;
-var plans = []
+var movables = []
 
 function setup() {
 	timeline = new Timeline();
@@ -10,6 +10,18 @@ function setup() {
 
 function draw() {
 	timeline.display();
+
+	plans.forEach(function(item){
+		if (!movables.includes(item)){
+			select('#'.concat(item)).mousePressed(movePlan);
+			}
+	});
+
+}
+
+function movePlan(){
+	// console.log(this.elt);
+	select('#'.concat(this.elt.id)).position(mouseX-60, height-80);
 }
 
 function windowResized() {
@@ -17,19 +29,23 @@ function windowResized() {
 	timeline.w = windowWidth;
 }
 
-
 function keyPressed(){
-	if (plans.length > 0){
-		plans.pop().remove();
-		console.log("removed!");
-	} else {
-		console.log("not removed!");
-	}
+	// if (plans.length > 0){
+	// 	plans.pop().remove();
+	// 	console.log("removed!");
+	// } else {
+	// 	console.log("not removed!");
+	// }
 }
 
 function mouseClicked(){
-	var new_plan = createDiv("test");
-	new_plan.parent('timeline-holder');
-	new_plan.position(mouseX, height-80);
-	plans.push(new_plan);
+	// plans.forEach(function(item){
+	// 	if (mouseX)
+	// 	console.log(item);
+	// 	if (!movables.includes(item)){
+	// 		// select('#'.concat(item)).mouseClicked(movePlan);
+	// 		}
+	// });
+
 }
+

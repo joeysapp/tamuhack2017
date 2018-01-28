@@ -60,9 +60,32 @@ function init() {
     wrp_lat = place.geometry.location.lat();
     wrp_placeid = place.place_id;
     $("#wrp_add").click();
+
+
+    var free_pos = (Math.random()*width).toString();
+    var ct = plans.length;
+    var div_id = "event-"+ct.toString();
+    var name_event = wrp_name.slice(0, 20);
+
+    $('#timeline-holder').append('<div id='.concat(div_id).concat('>').concat(name_event).concat('</div>'));   
+    $('#'.concat(div_id)).css("position","absolute");
+    $('#'.concat(div_id)).css("top","80px");
+    $('#'.concat(div_id)).css("left",free_pos.concat("px"));
+    $('#'.concat(div_id)).css("color", "white");
+    $('#'.concat(div_id)).css("font-size", "12px");
+    $('#'.concat(div_id)).css("background-color", "grey");
+    $('#'.concat(div_id)).css("height", "2em");
+    $('#'.concat(div_id)).css("width", "12em");
+    $('#'.concat(div_id)).css("text-align", "center");
+    $('#'.concat(div_id)).css("vertical-align", "middle");
+    $('#'.concat(div_id)).css("text-decoration", "underline");
+    $('#'.concat(div_id)).css("line-height", "20px");
+
+    plans.push(div_id);
+
     
     $.ajax({
-      url: '/getPopularity',
+      url: '../getPopularity:5000',
       type: 'POST',
       data: JSON.stringify(data),
       contentType: 'application/json;charset=UTF-8',

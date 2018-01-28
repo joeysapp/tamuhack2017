@@ -49,16 +49,17 @@
 
 <script>
 	// GLOBAL VARS LELE
+	var keys = {};
+	window.onkeyup = function(e) { keys[e.keyCode] = false; }
+	window.onkeydown = function(e) { keys[e.keyCode] = true; }
 	var places = [];
 	var p_set = new Set();
 	var wrp_name, wrp_lat, wrp_lng, wrp_placeid;
 	var wrp_delname;
 	var wrp_actname;
 	var sel_placeid, sel_name;
-	
-	var keys = {};
-	window.onkeyup = function(e) { keys[e.keyCode] = false; }
-	window.onkeydown = function(e) { keys[e.keyCode] = true; }
+
+  var plans = [];
 </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="scripts/p5.min.js"></script>
@@ -101,7 +102,10 @@
 		<div id="esri" style="height:580px; width:100%;"></div>
 
     <!-- P5.js instance, handling drag/drop -->
-    <div id="timeline-holder"></div>
+    <div id="timeline-holder">
+      
+
+    </div>
     
   </body>
 </html>
