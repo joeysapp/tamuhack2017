@@ -91,10 +91,13 @@ function init() {
         dataType:"json",
         data: JSON.stringify(data),
         success: function (msg, status, jqXHR){
-          console.log("SUCCESS", status, msg);
+          timeline.hours.push(msg['data'])
+          console.log(timeline.hours);
+          timeline.hour_idx += 1;
+
         },
         error: function(error) {
-          console.log("ERROR", error);
+          console.log("Error getting Google Popularity via flask", error);
             }
       });
 

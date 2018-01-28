@@ -1,6 +1,8 @@
 var canvas, timeline;
 var movables = []
 
+var show_hours = false;
+
 function setup() {
 	timeline = new Timeline();
 
@@ -22,6 +24,8 @@ function draw() {
 function movePlan(){
 	// console.log(this.elt);
 	select('#'.concat(this.elt.id)).position(mouseX-60, height-80);
+	console.log(this.elt.id);
+	timeline.hour_idx = this.elt.id.split("-")[1];
 }
 
 function windowResized() {
@@ -38,14 +42,12 @@ function keyPressed(){
 	// }
 }
 
-function mouseClicked(){
-	// plans.forEach(function(item){
-	// 	if (mouseX)
-	// 	console.log(item);
-	// 	if (!movables.includes(item)){
-	// 		// select('#'.concat(item)).mouseClicked(movePlan);
-	// 		}
-	// });
-
+function mousePressed(){
+	show_hours = true;
+	console.log("MousePressed,", timeline.hour_idx);
 }
+function mouseReleased(){
+	show_hours = false;
+}
+
 
