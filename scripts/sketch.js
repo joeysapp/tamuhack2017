@@ -19,13 +19,23 @@ function draw() {
 			}
 	});
 
+	// if (dragging){
+
+	// 	select('#'.concat(this.elt.id)).position(mouseX-, height-80);
+
+	// }
+
 }
+
+var dragging = false;
 
 function movePlan(){
 	// console.log(this.elt);
 	select('#'.concat(this.elt.id)).position(mouseX-60, height-80);
+
+
 	console.log(this.elt.id);
-	timeline.hour_idx = (this.elt.id.split("-")[1]).parseInt();
+	timeline.hour_idx = parseInt(this.elt.id.split("-")[1]);
 }
 
 function windowResized() {
@@ -43,11 +53,10 @@ function keyPressed(){
 }
 
 function mousePressed(){
-	show_hours = true;
-	console.log("MousePressed,", timeline.hour_idx);
+	show_hours = !show_hours;
 }
-function mouseReleased(){
-	show_hours = false;
-}
+// function mouseReleased(){
+// 	show_hours = false;
+// }
 
 

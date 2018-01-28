@@ -8,15 +8,13 @@ function Timeline() {
 	this.display = function(){
 
 		// Base layer
-		noStroke();
-		fill("#ffffff");
-		rect(20, 20, this.w-40, this.h-40);
+
 		
 		// Begin the base for timeline!
 
 		stroke("#e6e6e6");
 		strokeWeight(1.1);
-		noFill();
+		fill(255);
 		rect(20, 20, this.w-40, this.h-40);
 
 		var step;
@@ -34,17 +32,12 @@ function Timeline() {
 		}
 
 		if (show_hours && this.hours_idx != -1 && this.hours.length > 0){
-			console.log("hi");
-			console.log(this.hours[this.hour_idx]);
 			var x = 25;
 
-			stroke(20, 240, 20, 80);
+			stroke(20, 240, 20, 150);
 			strokeWeight(4);
 			for (step = 1; step < 23; step++) {
-
-				line(x, this.h - 25 + map(this.hours[this.hour_idx][constrain(step-1, 0, 24)], 0, 100, 0, -140), x + width/24, this.h - 25 + map(this.hours[this.hour_idx][step], 0, 100, 0, -140));
-				// x += width/24;
-				// y += map(this.hours[step], 0, 100, 0, -160)
+				line(x, this.h - 25 + map(this.hours[this.hour_idx][constrain(step-1, 0, 24)], 0, 100, 0, -120), x + width/24, this.h - 25 + map(this.hours[this.hour_idx][step], 0, 100, 0, -120));
 				x += width/24;
 
 

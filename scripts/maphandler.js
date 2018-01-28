@@ -62,14 +62,14 @@ function init() {
     $("#wrp_add").click();
 
 
-    var free_pos = (Math.random()*width).toString();
+    var free_pos = (Math.random()*(width-50)).toString();
     var ct = plans.length;
     var div_id = "event-"+ct.toString();
     var name_event = wrp_name.slice(0, 20);
 
     $('#timeline-holder').append('<div id='.concat(div_id).concat('>').concat(name_event).concat('</div>'));   
     $('#'.concat(div_id)).css("position","absolute");
-    $('#'.concat(div_id)).css("top","80px");
+    $('#'.concat(div_id)).css("top","30px");
     $('#'.concat(div_id)).css("left",free_pos.concat("px"));
     $('#'.concat(div_id)).css("color", "white");
     $('#'.concat(div_id)).css("font-size", "12px");
@@ -80,6 +80,8 @@ function init() {
     $('#'.concat(div_id)).css("vertical-align", "middle");
     $('#'.concat(div_id)).css("text-decoration", "underline");
     $('#'.concat(div_id)).css("line-height", "20px");
+    $('#'.concat(div_id)).css("animation-name", 'topFadeOut');
+    $('#'.concat(div_id)).css("animation-duration", "2s");
 
     plans.push(div_id);
 

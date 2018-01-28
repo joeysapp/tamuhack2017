@@ -7,6 +7,24 @@
    <link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/themes/calcite/dijit/calcite.css">
    <link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/themes/calcite/esri/esri.css">
     <style> 
+
+    @keyframes topFadeOut {
+        0% {
+          position: absolute;
+          top: -3em;
+          opacity: 0;
+        }
+
+        50% {
+          position: absolute;
+          top: -1.5em;
+          opacity: 0.5;
+        }
+
+        100% {
+          opacity: 1;
+        }
+      }
       body {
         padding: 0; 
         margin: 0;
@@ -22,7 +40,7 @@
       }
 	  
       #esri {
-         height: 100%;
+         height: 600px;
          width: 100%;
          margin: 0;
          padding: 0;
@@ -112,7 +130,7 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdUmVr5N1DbxjqBvLV1dAYNTZVl2FOi7I&libraries=places&callback=init" async defer></script>
 
     <!-- Map instance -->
-		<div id="esri" style="height:580px; width:100%;"></div>
+		<div id="esri" style="height:100vh; width:100%;"></div>
 
     <!-- P5.js instance, handling drag/drop -->
     <div id="timeline-holder">

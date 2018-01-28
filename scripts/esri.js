@@ -31,7 +31,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	function shiftCenter(point,zoom) {
 		var pow = zoom - 8;
 		var k = 0;
-		var delt = 40000;
+		var delt = 54000;
 		while (k < pow) {
 			delt /= 2;
 			k += 1;
@@ -273,7 +273,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	}*/
   
   function myGraphicsClickHandler(evt) {
-		if(keys[17]) removeMarker(evt.graphic.attributes.p_name);
+		if(keys[13]) removeMarker(evt.graphic.attributes.p_name);
 		else {
 		if(sel_name !== undefined && sel_name.length > 0) {
 			unselect(sel_name);
