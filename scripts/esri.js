@@ -24,19 +24,6 @@ ProjectParameters, Point, Extent, webMercatorUtils, SimpleMarkerSymbol, TextSymb
 	labelFont.setFamily("Arial");
 	labelFont.setWeight(Font.WEIGHT_BOLD);
 
-	var places = [];
-	var p_set = new Set();
-
-	function append_block(place) {
-		var $del_button = $("<button>x</button>")
-		$del_button.attr("class","delete");
-		//$del_button.attr("p_id", place.id);
-		$del_button.attr("p_name", place.name);
-		var $new_div = $("<div>" + snip(place.name) + "</div>");
-		$new_div.append($del_button);
-		$('#timeline').append($new_div);
-	}
-
 	var latLongSR = new SpatialReference(4326);
 	var xySR = esriMap.spatialReference;
 
@@ -75,6 +62,11 @@ ProjectParameters, Point, Extent, webMercatorUtils, SimpleMarkerSymbol, TextSymb
 				//update_text();
 			}
 	}
+	
+
+	$("#wrp_add").on("click", function() {
+		addMarker(wrp_lng,wrp_lat,wrp_name);
+	});
 
 	var austin = new SpatialReference(102100);
 	var mapCenter = new Point(-10880699.875412026, 3537992.625178636, austin);
