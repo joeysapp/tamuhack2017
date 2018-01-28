@@ -1,5 +1,6 @@
 var canvas;
 var tl;
+var w;
 
 function setup() {
 	tl = new Timeline();
@@ -18,4 +19,17 @@ function windowResized() {
 
 	tl.w = windowWidth;
 	
+}
+
+var plans = []
+
+// So these should actually be divs, that we add etc
+function mouseClicked(){
+	var new_plan = createDiv("test");
+	new_plan.parent('timeline-holder');
+	new_plan.position(mouseX, height-80);
+	plans.push(new_plan);
+
+	// tl.addWidget(new Widget(constrain(mouseX, 0, width), constrain(mouseY, 0, height)));
+
 }

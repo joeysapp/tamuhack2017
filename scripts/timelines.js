@@ -1,6 +1,18 @@
+widgets = []
+
 function Timeline() {
 	this.w = windowWidth;
 	this.h = 160;
+
+
+	this.addWidget = function(w){
+		widgets.push(w);
+	}
+
+	// not sure if this will work lol
+	this.popWidget = function(){
+		widgets.pop();
+	}
 
 	this.display = function(){
 
@@ -22,6 +34,11 @@ function Timeline() {
 		for (step = 1; step < 24; step++) {
 			point(step*1/24*this.w, this.h/2 + 5);
 		}
+
+
+		widgets.forEach(function(w){
+			w.display();
+		});
 	}
 	
 
