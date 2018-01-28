@@ -10,10 +10,10 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	    center: [30.2631898, -97.6984465], // lon, lat
 	    zoom: 5,
 	});
-	var window_x = 2*2770;
-	var window_y = 2770;
-	
+	var window_x = 2*2000;
+	var window_y = 2000;
 	var stopSymbol = new SimpleMarkerSymbol();
+	
 
 	routeTask = new RouteTask("https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World");
 
