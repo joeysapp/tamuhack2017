@@ -7,13 +7,17 @@ require(
 ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, FeatureSet, SimpleMarkerSymbol, SimpleLineSymbol,  TextSymbol, Font) {
 	var esriMap = new Map("esri", {
 	    basemap: "streets",
+		slider: false,
 	    center: [30.2631898, -97.6984465], // lon, lat
 	    zoom: 5,
 	});
-	var window_x = 2*2770;
-	var window_y = 2770;
-	
+	var window_x = 2*2000;
+	var window_y = 2000;
 	var stopSymbol = new SimpleMarkerSymbol();
+	
+	var wide_mid;
+	var wide_zoom;
+	
 
 	routeTask = new RouteTask("https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World");
 
@@ -64,10 +68,10 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	var labelFont = new Font();
 
 	var textColor = Color.fromString("rgb(255,255,255)");
-	var markerColor = Color.fromString("rgb(100,100,100)");
+	var markerColor = Color.fromString("rgb(212,0,12)");
 	var actColor = Color.fromString("rgb(212,0,12)");
 	
-	var markerSize = 20;
+	var markerSize = 23;
 	var selSize = 25;
 	
 	selMarkerSymbol.setColor(markerColor);
@@ -96,11 +100,13 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 		var num_pts = places.length;
 		console.log(num_pts);
 		if (num_pts == 0) {
+			esriMap.centerAndZoom(mapCenter,  10);
 			return true;
 		}
 		else if (num_pts == 1) {
-			var newCenter = new Point(places[0].x,places[0].y,esriMap.spatialReference);
-			esriMap.centerAndZoom(newCenter,15);
+			wide_mid = new Point(places[0].x,places[0].y,esriMap.spatialReference);
+			wide_zoom = 15;
+			esriMap.centerAndZoom(wide_mid,wide_zoom);
 			return true;
 		}
 		else {
@@ -144,11 +150,28 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 			if (max_pow > 5) {
 				return false;
 			} else {
-				var newCenter = new Point(avg_x,avg_y,esriMap.spatialReference);
-				esriMap.centerAndZoom(newCenter,15-max_pow);
+				wide_mid = new Point(avg_x,avg_y,esriMap.spatialReference);
+				wide_zoom = 15-max_pow;
+				esriMap.centerAndZoom(wide_mid,wide_zoom);
 				return true;
 			}
 		}
+	}
+	
+
+	function select(name) {
+		console.log("selecting ", name);
+		//simpGraph[name].symbol = new SimpleMarkerSymbol(selMarkerSymbol);
+		//esriMap.graphics.refresh();
+		esriMap.centerAndZoom(simpGraph[name].geometry,wide_zoom+2);
+		console.log(selMarkerSymbol.size);
+	}
+	
+	function unselect(name) {
+		console.log("unselecting ", name);
+		//simpGraph[name].symbol = new SimpleMarkerSymbol(markerSymbol);
+		//esriMap.graphics.refresh();
+		//console.log(markerSymbol.size);
 	}
 	
 	function addMarker(longitude,latitude,name,placeid) {
@@ -188,6 +211,10 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 					esriMap.graphics.add(text);
 					simpGraph[name] = simp;
 					textGraph[name] = text;
+					
+					if(sel_name !== undefined && sel_name.length > 0) {
+						unselect(sel_name);
+					}
 					// ADD to route lol
 					//addStop(mk_point);
 				}
@@ -197,29 +224,11 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	$("#wrp_add").on("click", function() {
 		addMarker(wrp_lng,wrp_lat,wrp_name,wrp_placeid);
 	});
+	
 
 	var austin = new SpatialReference(102100);
 	var mapCenter = new Point(-10880699.875412026, 3537992.625178636, austin);
 
-
-  esriMap.on("load", function (){
-	console.log("map loaded");
-	connect.connect(esriMap.graphics, "onClick", myGraphicsClickHandler);
-	esriMap.centerAndZoom(mapCenter,  10);
-  });
-
-	function select(name) {
-	//console.log(simpGraph[name]);
-		simpGraph[name].symbol = new SimpleMarkerSymbol(selMarkerSymbol);
-		esriMap.graphics.refresh();
-	}
-	
-	function unselect(name) {
-		simpGraph[name].symbol = new SimpleMarkerSymbol(markerSymbol);
-		esriMap.graphics.refresh();
-		//console.log(markerSymbol);
-	}
-	
 	/*
 	function activate(name) {
 		var old_pt = new Point(simpGraph[name].geometry);
@@ -253,12 +262,14 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	}*/
   
   function myGraphicsClickHandler(evt) {
+		if(keys[17]) removeMarker(evt.graphic.attributes.p_name);
+		else {
 		if(sel_name !== undefined && sel_name.length > 0) {
-		
 			unselect(sel_name);
 		}
 		
 		if (sel_name == evt.graphic.attributes.p_name) {
+			console.log("unselect2");
 			sel_name = "";
 			$("#esri_unsel").click();
 		}
@@ -269,7 +280,11 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 			console.log(sel_placeid," is selected");
 			select(sel_name);
 		}
+		if(sel_name === undefined || sel_name.length == "") {
+			esriMap.centerAndZoom(wide_mid,wide_zoom);
+		}
 		//console.log(evt.graphic.attributes);
+		}
   }
   
   esriMap.on("extent-change", showExtent);
@@ -293,12 +308,20 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 		}
 	}
 	p_set.delete(name);
-
+	resetBounding();
 	console.log(places);
 }
 
 	$('#wrp_del').on('click', function() {
 		removeMarker(wrp_delname);
 	});
+	
+
+  esriMap.on("load", function (){
+	console.log("map loaded");
+	connect.connect(esriMap.graphics, "onClick", myGraphicsClickHandler);
+	esriMap.centerAndZoom(mapCenter,  10);
+  });
+	
 });
 	  
