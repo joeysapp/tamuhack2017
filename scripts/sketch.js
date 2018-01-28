@@ -6,7 +6,6 @@ function setup() {
 	tl = new Timeline();
 
  	canvas = createCanvas(windowWidth, 160);
- 	// background(41);
  	canvas.parent('timeline-holder');
 }
 
@@ -23,6 +22,15 @@ function windowResized() {
 
 var plans = []
 
+function keyPressed(){
+	if (plans.length > 0){
+		var tmp = plans.pop();
+		tmp.remove();
+	}
+	console.log("removed!");
+
+}
+
 // So these should actually be divs, that we add etc
 function mouseClicked(){
 	var new_plan = createDiv("test");
@@ -31,5 +39,4 @@ function mouseClicked(){
 	plans.push(new_plan);
 
 	// tl.addWidget(new Widget(constrain(mouseX, 0, width), constrain(mouseY, 0, height)));
-
 }
