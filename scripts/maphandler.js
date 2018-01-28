@@ -54,8 +54,13 @@ function init() {
     data['place'] = place.place_id;
     console.log(place.place_id);
 
-    // bruce's esri stuff goes here
-
+      // bruce's esri stuff goes here
+    wrp_name = place.name;
+    wrp_lng = place.geometry.location.lng();
+    wrp_lat = place.geometry.location.lat();
+    wrp_placeid = place.place_id;
+    $("#wrp_add").click();
+    
     $.ajax({
       url: '/getPopularity',
       type: 'POST',
