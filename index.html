@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
+    <style> 
+      body {
+        padding: 0; 
+        margin: 0;
+      } 
+
+      input {
+        margin-top:8px;
+        font-size: 18px;
+        width: 50%;
+        height: 1.5em;
+      }
+
+      #map {
+        height: 100%;
+      }
+
+      #timeline-holder {
+        position: absolute; bottom: 0px; 
+
+      }
+
+            #infowindow-content {
+        display: none;
+      }
+      #map #infowindow-content {
+        display: inline;
+      }
+
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="scripts/p5.min.js"></script>
+    <script src="scripts/p5.dom.min.js"></script>
+    <script src="scripts/timelines.js"></script>
+    <script src="scripts/sketch.js"></script>
+  </head>
+  <body>
+
+   <div id="input">
+      <input id="main_input" class="controls" type="text" placeholder="Enter a location">
+    </div>
+
+    <div id="map_holder" style="height:100vh">
+    <div id="map"></div>
+        <div id="infowindow-content">
+      <span id="place-name"  class="title"></span><br>
+      Place ID <span id="place-id"></span><br>
+      <span id="place-address"></span>
+    </div>
+  </div>
+
+    <script src="scripts/maphandler.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdUmVr5N1DbxjqBvLV1dAYNTZVl2FOi7I&libraries=places&callback=init"
+        async defer></script>
+
+
+    <div id="center-of-page-map-goes-here"></div>
+
+    <div id="timeline-holder"></div>
+
+
+    
+  </body>
+</html>
