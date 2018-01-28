@@ -11,8 +11,8 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	    center: [30.2631898, -97.6984465], // lon, lat
 	    zoom: 5,
 	});
-	var window_x = 2*1650;
-	var window_y = 1650;
+	var window_x = 2*1200;
+	var window_y = 1200;
 	var stopSymbol = new SimpleMarkerSymbol();
 	
 	var wide_mid;
