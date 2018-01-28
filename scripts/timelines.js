@@ -7,24 +7,21 @@ function Timeline() {
 		// Base layer
 		noStroke();
 		fill("#ffffff");
-		rect(30, 48, this.w-80, this.h-68);
+		rect(20, 20, this.w-40, this.h-40);
 		
 		// Begin the base for timeline!
 
 		stroke("#e6e6e6");
 		strokeWeight(1.1);
 		noFill();
-		rect(30+3, 48+3, this.w-86, this.h-74);
+		rect(20, 20, this.w-40, this.h-40);
 
 		var step;
-		push();
-		translate(30, 48);
 		stroke("#666666");
 		strokeWeight(3);
-		for (step = 1; step < 22; step++) {
-			point(step*1/24*this.w, (this.h/2) - 37);
+		for (step = 1; step < 24; step++) {
+			point(step*1/24*this.w, this.h/2 + 5);
 		}
-		pop();
 	}
 	
 
