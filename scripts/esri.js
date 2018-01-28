@@ -103,8 +103,9 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 			return true;
 		}
 		else if (num_pts == 1) {
-			var newCenter = new Point(places[0].x,places[0].y,esriMap.spatialReference);
-			esriMap.centerAndZoom(newCenter,15);
+			wide_mid = new Point(places[0].x,places[0].y,esriMap.spatialReference);
+			wide_zoom = 15;
+			esriMap.centerAndZoom(wide_mid,wide_zoom);
 			return true;
 		}
 		else {
@@ -160,8 +161,8 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	function select(name) {
 	//console.log(simpGraph[name]);
 		//simpGraph[name].symbol = new SimpleMarkerSymbol(selMarkerSymbol);
-		//esriMap.graphics.refresh();
-		esriMap.centerAndZoom(simpGraph[name].geometry,15);
+		//esriMap.graphics.refresh();3
+		esriMap.centerAndZoom(simpGraph[name].geometry,wide_zoom+2);
 	}
 	
 	function unselect(name) {
