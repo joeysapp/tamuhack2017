@@ -83,20 +83,28 @@ function init() {
 
     plans.push(div_id);
 
-    
-    $.ajax({
-      url: '../getPopularity:5000',
-      type: 'POST',
-      data: JSON.stringify(data),
-      contentType: 'application/json;charset=UTF-8',
-        cache:false,
-        success: function (response) {
-          console.log(response);
+    // // Sending to flask instance
+     $.ajax({
+        url:'http://127.0.0.1:5000/getPopularity',
+        type: "POST",
+        contentType:"application/json",
+        dataType:"json",
+        data: JSON.stringify(data),
+        success: function (msg, status, jqXHR){
+          console.log("SUCCESS", status, msg);
         },
-        error: function(response){
-          console.log("help me");
-        }
-      })
+        error: function(error) {
+          console.log("ERROR", error);
+            }
+      });
+
+      // $.getJSON('127.0.0.1:5000/getPopularity', {
+      //   {'a': '1'}
+      // }, function(data){
+      //   console.log(data);
+      // });
+
+
   })
 }
 
