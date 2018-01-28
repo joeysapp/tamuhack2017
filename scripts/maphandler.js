@@ -6,15 +6,16 @@ function init() {
 
   var input = document.getElementById('main_input');
 
-  // var input = "Austin Bouldering Project, Springdale Road, Austin, TX, United States";
   var autocomplete = new google.maps.places.Autocomplete(input);
-  // autocomplete.bindTo('bounds', map);
 
+  // This is used to get Google Maps working!
+  // autocomplete.bindTo('bounds', map);
   // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
   var infowindow = new google.maps.InfoWindow();
   var infowindowContent = document.getElementById('infowindow-content');
   infowindow.setContent(infowindowContent);
+
   var marker = new google.maps.Marker({
     map: map
   });
@@ -43,28 +44,30 @@ function init() {
     });
     marker.setVisible(true);
 
-          infowindowContent.children['place-name'].textContent = place.name;
-          infowindowContent.children['place-id'].textContent = place.place_id;
-          infowindowContent.children['place-address'].textContent =
-              place.formatted_address;
-          infowindow.open(map, marker);
+    infowindowContent.children['place-name'].textContent = place.name;
+    infowindowContent.children['place-id'].textContent = place.place_id;
+    infowindowContent.children['place-address'].textContent = place.formatted_address;
+    infowindow.open(map, marker);
+
+    // Data used for stuff, place_id!
     data = {}
     data['place'] = place.place_id;
     console.log(place.place_id);
 
+    // bruce's esri stuff goes here
 
     $.ajax({
       url: '/getPopularity',
       type: 'POST',
       data: JSON.stringify(data),
       contentType: 'application/json;charset=UTF-8',
-            cache:false,
-            success: function (response) {
-              console.log(response);
-            },
-            error: function(response){
-              console.log("help me");
-            }
+        cache:false,
+        success: function (response) {
+          console.log(response);
+        },
+        error: function(response){
+          console.log("help me");
+        }
       })
   })
 }
