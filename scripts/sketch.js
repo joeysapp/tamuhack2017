@@ -1,42 +1,35 @@
-var canvas;
-var tl;
-var w;
+var canvas, timeline;
+var plans = []
 
 function setup() {
-	tl = new Timeline();
+	timeline = new Timeline();
 
  	canvas = createCanvas(windowWidth, 160);
  	canvas.parent('timeline-holder');
 }
 
 function draw() {
-	tl.display();
+	timeline.display();
 }
 
 function windowResized() {
 	resizeCanvas(windowWidth, 160);
-
-	tl.w = windowWidth;
-	
+	timeline.w = windowWidth;
 }
 
-var plans = []
 
 function keyPressed(){
 	if (plans.length > 0){
-		var tmp = plans.pop();
-		tmp.remove();
+		plans.pop().remove();
+		console.log("removed!");
+	} else {
+		console.log("not removed!");
 	}
-	console.log("removed!");
-
 }
 
-// So these should actually be divs, that we add etc
 function mouseClicked(){
 	var new_plan = createDiv("test");
 	new_plan.parent('timeline-holder');
 	new_plan.position(mouseX, height-80);
 	plans.push(new_plan);
-
-	// tl.addWidget(new Widget(constrain(mouseX, 0, width), constrain(mouseY, 0, height)));
 }
