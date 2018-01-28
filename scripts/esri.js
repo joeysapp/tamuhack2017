@@ -7,12 +7,12 @@ require(
 ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, FeatureSet, SimpleMarkerSymbol, SimpleLineSymbol,  TextSymbol, Font) {
 	var esriMap = new Map("esri", {
 	    basemap: "streets",
-		slider: false,
+		//slider: false,
 	    center: [30.2631898, -97.6984465], // lon, lat
 	    zoom: 5,
 	});
-	var window_x = 2*1200;
-	var window_y = 1200;
+	var window_x = 2*1400;
+	var window_y = 1400;
 	var stopSymbol = new SimpleMarkerSymbol();
 	
 	var wide_mid;
@@ -27,7 +27,18 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
         routeParams.outSpatialReference = {
           "wkid" : 102100
         };
-		
+	
+	function shiftCenter(point,zoom) {
+		var pow = zoom - 8;
+		var k = 0;
+		var delt = 40000;
+		while (k < pow) {
+			delt /= 2;
+			k += 1;
+		}
+		return new Point(point.x,point.y-delt,esriMap.spatialReference);
+	};
+	
 	function addStop(point) {
           var stop = esriMap.graphics.add(new Graphic(point, stopSymbol));
           routeParams.stops.features.push(stop);
@@ -100,13 +111,13 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 		var num_pts = places.length;
 		//console.log(num_pts);
 		if (num_pts == 0) {
-			esriMap.centerAndZoom(mapCenter,  10);
+			esriMap.centerAndZoom(shiftCenter(mapCenter,10),  10);
 			return true;
 		}
 		else if (num_pts == 1) {
 			wide_mid = new Point(places[0].x,places[0].y,esriMap.spatialReference);
 			wide_zoom = 15;
-			esriMap.centerAndZoom(wide_mid,wide_zoom);
+			esriMap.centerAndZoom(shiftCenter(wide_mid,wide_zoom), wide_zoom);
 			return true;
 		}
 		else {
@@ -152,7 +163,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 			} else {
 				wide_mid = new Point(avg_x,avg_y,esriMap.spatialReference);
 				wide_zoom = 15-max_pow;
-				esriMap.centerAndZoom(wide_mid,wide_zoom);
+				esriMap.centerAndZoom(shiftCenter(wide_mid,wide_zoom),wide_zoom);
 				return true;
 			}
 		}
@@ -163,7 +174,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 		//console.log("selecting ", name);
 		//simpGraph[name].symbol = new SimpleMarkerSymbol(selMarkerSymbol);
 		//esriMap.graphics.refresh();
-		esriMap.centerAndZoom(simpGraph[name].geometry,wide_zoom+2);
+		esriMap.centerAndZoom(shiftCenter(simpGraph[name].geometry,wide_zoom+2),wide_zoom+2);
 		console.log(selMarkerSymbol.size);
 	}
 	
@@ -281,7 +292,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 			select(sel_name);
 		}
 		if(sel_name === undefined || sel_name.length == "") {
-			esriMap.centerAndZoom(wide_mid,wide_zoom);
+			esriMap.centerAndZoom(shiftCenter(wide_mid,wide_zoom),wide_zoom);
 		}
 		//console.log(evt.graphic.attributes);
 		}
@@ -320,7 +331,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
   esriMap.on("load", function (){
 	//console.log("map loaded");
 	connect.connect(esriMap.graphics, "onClick", myGraphicsClickHandler);
-	esriMap.centerAndZoom(mapCenter,  10);
+	esriMap.centerAndZoom(shiftCenter(mapCenter,  10),10);
   });
 	
 });
