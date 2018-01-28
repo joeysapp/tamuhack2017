@@ -15,6 +15,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	
 	var textGraph = {};
 	var simpGraph = {};
+	var act_name = new Set();
 	
 	function init() {
 		dojo.connect(map, "onLoad", function() {
@@ -29,19 +30,27 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	var markerSymbol = new SimpleMarkerSymbol();
 	var selMarkerSymbol = new SimpleMarkerSymbol();
 	var actMarkerSymbol = new SimpleMarkerSymbol();
+	var actSelMarkerSymbol = new SimpleMarkerSymbol();
 	var labelFont = new Font();
 
 	var textColor = Color.fromString("rgb(255,255,255)");
 	var markerColor = Color.fromString("rgb(100,100,100)");
 	var actColor = Color.fromString("rgb(212,0,12)");
-	var selColor = Color.fromString("rgb(12,0,212)");
 	
 	var markerSize = 20;
 	var selSize = 25;
 	
-	selMarkerSymbol.setColor(selColor);
+	selMarkerSymbol.setColor(markerColor);
 	selMarkerSymbol.setSize(selSize);
 	selMarkerSymbol.outline.setColor(textColor);
+	
+	actMarkerSymbol.setColor(actColor);
+	actMarkerSymbol.setSize(markerSize);
+	actMarkerSymbol.outline.setColor(textColor);
+	
+	actSelMarkerSymbol.setColor(actColor);
+	actSelMarkerSymbol.setSize(selSize);
+	actSelMarkerSymbol.outline.setColor(textColor);
 	
 	markerSymbol.setColor(markerColor);
 	markerSymbol.setSize(markerSize);
@@ -169,59 +178,51 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 
 	function select(name) {
 	//console.log(simpGraph[name]);
-	/*
-		simpGraph[name].symbol.setSize(selSize);
+		simpGraph[name].symbol = new SimpleMarkerSymbol(selMarkerSymbol);
 		esriMap.graphics.refresh();
-	*/
-		var old_pt = new Point(simpGraph[name].geometry);
-		var g_attr = simpGraph[name].attributes;
-		//console.log(old_pt,g_attr);
-		var simp = new Graphic(old_pt,selMarkerSymbol,g_attr);
-		esriMap.graphics.remove(simpGraph[name]);
-		esriMap.graphics.remove(textGraph[name]);
-		var label = new TextSymbol(name[0],labelFont,textColor).setOffset(0,-4.5).setAlign(TextSymbol.ALIGN_MIDDLE);
-		var text = new Graphic(old_pt,label,g_attr);
-		esriMap.graphics.add(simp);
-		esriMap.graphics.add(text);
-		simpGraph[name] = simp;
-		textGraph[name] = text;
 	}
 	
 	function unselect(name) {
-	/*
-		simpGraph[name].symbol.setSize(markerSize);
+		simpGraph[name].symbol = new SimpleMarkerSymbol(markerSymbol);
 		esriMap.graphics.refresh();
-	*/
+		//console.log(markerSymbol);
+	}
+	
+	/*
+	function activate(name) {
 		var old_pt = new Point(simpGraph[name].geometry);
 		var g_attr = simpGraph[name].attributes;
 		//console.log(old_pt,g_attr);
-		var simp = new Graphic(old_pt,markerSymbol,g_attr);
 		esriMap.graphics.remove(simpGraph[name]);
 		esriMap.graphics.remove(textGraph[name]);
 		var label = new TextSymbol(name[0],labelFont,textColor).setOffset(0,-4.5).setAlign(TextSymbol.ALIGN_MIDDLE);
 		var text = new Graphic(old_pt,label,g_attr);
-		esriMap.graphics.add(simp);
 		esriMap.graphics.add(text);
+		var simp;
+		if (sel_name == name) {
+			simp = new Graphic(old_pt,actSelMarkerSymbol,g_attr);
+		} else {
+			simp = new Graphic(old_pt,actMarkerSymbol,g_attr);
+		}
+		esriMap.graphics.add(simp);
 		simpGraph[name] = simp;
 		textGraph[name] = text;
-	}
-	
-	function activate(name) {
-		simpGraph[name].symbol.setColor(actColor);
-		esriMap.graphics.refresh();
+		act_name.add(name);
 	}
 	
 	$("#esri_act").on('click', function() {
 		activate(wrp_actname);
 	});
 	
+	
 	function unactivate(name) {
 		simpGraph[name].symbol.setColor(markerColor);
 		esriMap.graphics.refresh();
-	}
+	}*/
   
   function myGraphicsClickHandler(evt) {
 		if(sel_name !== undefined && sel_name.length > 0) {
+		
 			unselect(sel_name);
 		}
 		
@@ -229,8 +230,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 			sel_name = "";
 			$("#esri_unsel").click();
 		}
-		
-		if (evt.graphic.attributes.p_name !== undefined && evt.graphic.attributes.p_name.length > 0) {
+		else if (evt.graphic.attributes.p_name !== undefined && evt.graphic.attributes.p_name.length > 0) {
 			sel_name = evt.graphic.attributes.p_name;
 			sel_placeid = evt.graphic.attributes.placeid;
 			$("#esri_sel").click();
