@@ -9,13 +9,16 @@
       } 
 
       input {
-        margin-top:8px;
+        margin-top:12px;
+        margin-left:12px;
+        padding:8px;
         font-size: 18px;
-        width: 50%;
-        height: 1.5em;
+        width: 97%;
+        height: 2em;
       }
 
       #map {
+        display: none;
         height: 100%;
       }
 
@@ -24,7 +27,7 @@
 
       }
 
-            #infowindow-content {
+      #infowindow-content {
         display: none;
       }
       #map #infowindow-content {
@@ -46,11 +49,13 @@
     </div>
 
     <div id="map_holder" style="height:100vh">
-    <div id="map"></div>
+    <div id="map" stype="display:none"></div>
         <div id="infowindow-content">
-      <span id="place-name"  class="title"></span><br>
-      Place ID <span id="place-id"></span><br>
-      <span id="place-address"></span>
+
+        <!-- Provided we get esri working, this can still be used -->
+        <span id="place-name"  class="title"></span><br>
+        <span id="place-id"></span><br>
+        <span id="place-address"></span>
     </div>
   </div>
 
@@ -58,12 +63,7 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdUmVr5N1DbxjqBvLV1dAYNTZVl2FOi7I&libraries=places&callback=init"
         async defer></script>
 
-
     <div id="center-of-page-map-goes-here"></div>
-
     <div id="timeline-holder"></div>
-
-
-    
   </body>
 </html>
