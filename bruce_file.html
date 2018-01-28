@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html dir="ltr">
+
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+   <title>ArcGIS API for JavaScript | Basic Search</title>
+   <link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/themes/calcite/dijit/calcite.css">
+   <link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/themes/calcite/esri/esri.css">
+   <style>
+      html,
+      body,
+      #map {
+         height: 100%;
+         width: 100%;
+         margin: 0;
+         padding: 0;
+      }
+      #search {
+         display: block;
+         position: absolute;
+         z-index: 2;
+         top: 20px;
+         left: 74px;
+      }
+   </style>
+   <script src="https://js.arcgis.com/3.23/"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <script>
+      require([
+		
+        "esri/map",
+		"esri/Color",
+        "esri/dijit/Search",
+        "esri/SpatialReference",
+		"esri/graphic",
+		"esri/tasks/GeometryService",
+		"esri/tasks/ProjectParameters",
+		"esri/geometry/Point",
+		"esri/geometry/Extent",
+		"esri/geometry/webMercatorUtils",
+		"esri/symbols/SimpleMarkerSymbol",
+		"esri/symbols/TextSymbol",
+		"dojo/domReady!"
+
+      ], function (Map, Color, Search, SpatialReference, Graphic, GeometryService, 
+	  ProjectParameters, Point, Extent, webMercatorUtils, SimpleMarkerSymbol, TextSymbol) {
+         var map = new Map("map", {
+            basemap: "gray",
+            center: [-120.435, 46.159], // lon, lat
+            zoom: 7
+         });
+		
+		gsvc = new GeometryService("https://utility.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
+		
+		function snip(name) {
+			var new_name = "";
+			for (var i = 0; i < name.length; ++i) {
+				if (name[i] != "-") {
+					new_name += name[i];
+				}
+				else {
+					break;
+				}
+			}
+			return new_name;
+		}
+		
+        var markerSymbol = new SimpleMarkerSymbol();
+		
+		var places = [];
+		var p_set = new Set();
+		
+		function append_block(place) {
+			var $del_button = $("<button>x</button>")
+			$del_button.attr("class","delete");
+			//$del_button.attr("p_id", place.id);
+			$del_button.attr("p_name", place.name);
+			var $new_div = $("<div>" + snip(place.name) + "</div>");
+			$new_div.append($del_button);
+			$('#timeline').append($new_div);
+		}
+		
+		
+		var latLongSR = new SpatialReference(4326);
+		var xySR = map.spatialReference;
+		
+		// JOEY LOOK AT THIS
+		function addMarker(longitude,latitude,name) {
+			var x;
+			var y;
+			
+			//console.log(webMercatorUtils.lngLatToXY(longitude,latitude));
+			
+			var merc = webMercatorUtils.lngLatToXY(longitude,latitude);
+			x = merc[0];
+			y = merc[1];
+		
+			console.log(x,y);
+		
+			var place = {};
+			place.name = name;
+			place.x = x;
+			place.y = y;
+			if(!p_set.has(place.name)) {
+					// INTERNAL BOOKKEEPING
+					//place.id = this_id;
+					//id_map[place.name] = this_id;
+					//this_id++;
+					p_set.add(place.name);
+					places.push(place);
+					
+					// ADD GRAPHICAL MARKER
+					var g_attr = {"p_id": place.id, "p_name":place.name};
+					var mk_point = new Point(x,y,map.spatialReference);
+					map.graphics.add(new Graphic(mk_point,markerSymbol,g_attr));
+					var label = new TextSymbol(name).setOffset(0,-25).setAlign(TextSymbol.ALIGN_MIDDLE);
+					map.graphics.add(new Graphic(mk_point,label,g_attr));
+					
+					// PUSH BLOCK TO TIMELINE
+					append_block(place);
+					//console.log(map.graphics.graphics);
+					//console.log(map.graphics.graphics.length);
+					
+					//update_text();
+				}
+		}
+		
+		// JOEY REPLACE THIS
+		// replace with autocomplete
+		// using your own lat/long values and name of the place
+		// call addMarker(lat,long,name)
+         var search = new Search({
+            map: map,
+			autoSelect: false
+         }, "search");
+         search.startup();
+		 search.on('search-results', function(e) {
+			console.log("result", e["results"]["0"]["0"]["feature"]["geometry"]);
+			//console.log("result", e["results"]["0"]["0"]["feature"]["geometry"]["x"]);
+			//console.log("result", e["results"]["0"]["0"]["feature"]["geometry"]["y"]);
+			var name = e["results"]["0"]["0"]["name"];
+			var x = e["results"]["0"]["0"]["feature"]["geometry"]["x"];
+			var y = e["results"]["0"]["0"]["feature"]["geometry"]["y"];
+		  
+			  var params = new ProjectParameters();
+			  var my_point = new Point(x,y,map.spatialReference);
+			  params.geometries = [my_point.normalize()];
+			  params.outSR = latLongSR;
+			  var latitude, longitude;
+			  gsvc.project(params, function(projectedPoints) {
+				pt = projectedPoints[0];
+				longitude = pt.x;
+				latitude = pt.y;
+				console.log("Added", longitude, latitude);
+				addMarker(longitude, latitude,name);
+			  });
+			
+			//console.log(places);
+		 });
+
+		var austin = new SpatialReference(102100);
+		var mapCenter = new Point(-10880699.875412026, 3537992.625178636, austin);
+		map.centerAndZoom(mapCenter,  12);
+		
+
+		  map.on("load", function (){
+			console.log("map loaded");
+			// Hook up jQuery
+			$(document).ready(jQueryReady);
+		  });
+		  
+		  map.on("extent-change", showExtent);
+		  function showExtent(event){
+			//console.log(event.extent);
+		  }
+		  
+		// JOEY USE THIS
+		  function removeMarker(name) {
+			var graph_list = map.graphics.graphics;
+			for (var i = 0; i < graph_list.length; i++) {
+				//console.log(map.graphics.graphics[i].attributes);
+				if (graph_list[i].attributes !== undefined) {
+					if (graph_list[i].attributes.p_name !== undefined) {
+						if(graph_list[i].attributes.p_name == name){
+							p_set.delete(name);
+							map.graphics.remove(graph_list[i]);
+							break;
+						}
+					}
+				}
+			}
+			for (var i = 0; i < places.length; i++) {
+				if (places[i].name == name) {
+					places.splice(i,1);
+				}
+			}
+			console.log(places);
+		  }
+
+		// JOEY replace this
+		// this removes markers when I press X on the timeline
+		// so replace w/ your own event handling
+		  function jQueryReady() {
+		  		$('#timeline').on("click","button", function( ) {
+				//event.preventDefault();
+				//console.log("click");
+				//alert("click");
+				//console.log();
+				var this_name = $(this).attr('p_name');
+				removeMarker(this_name);
+				$(this).parent().remove();
+			});
+		  };
+      });
+	  
+   </script>
+</head>
+
+<body class="calcite">
+   <div id="search"></div>
+   <div id="map" style="height: 700px"></div>
+   <div id="timeline"></div>
+</body>
+
+</html>
+ 
