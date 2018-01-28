@@ -4,7 +4,7 @@ require(
 ], function (Map, Color, Search, SpatialReference, Graphic, GeometryService, 
 ProjectParameters, Point, Extent, webMercatorUtils, SimpleMarkerSymbol, TextSymbol, Font) {
 	var esriMap = new Map("esri", {
-	    basemap: "gray",
+	    basemap: "streets",
 	    center: [30.2631898, -97.6984465], // lon, lat
 	    zoom: 7,
 	});
