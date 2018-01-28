@@ -13,17 +13,47 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	var window_x = 2*2770;
 	var window_y = 2770;
 	
+	var stopSymbol = new SimpleMarkerSymbol();
+
+	routeTask = new RouteTask("https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World");
+
+        //setup the route parameters
+        routeParams = new RouteParameters();
+        routeParams.stops = new FeatureSet();
+        routeParams.outSpatialReference = {
+          "wkid" : 102100
+        };
+		
+	function addStop(point) {
+          var stop = esriMap.graphics.add(new Graphic(point, stopSymbol));
+          routeParams.stops.features.push(stop);
+
+          if (routeParams.stops.features.length >= 2) {
+            routeTask.solve(routeParams);
+            lastStop = routeParams.stops.features.splice(0, 1)[0];
+          }
+    }
+        //Adds the solved route to the map as a graphic
+        function showRoute(evt) {
+          map.graphics.add(evt.result.routeResults[0].route.setSymbol(routeSymbol));
+        }
+
+        //Displays any error returned by the Route Task
+        function errorHandler(err) {
+          alert("An error occured\n" + err.message + "\n" + err.details.join("\n"));
+
+          routeParams.stops.features.splice(0, 0, lastStop);
+          map.graphics.remove(routeParams.stops.features.splice(1, 1)[0]);
+        }
+		
+		
+     routeTask.on("solve-complete", showRoute);
+     routeTask.on("error", errorHandler);
+  
+	
 	var textGraph = {};
 	var simpGraph = {};
 	var act_name = new Set();
-	
-	function init() {
-		dojo.connect(map, "onLoad", function() {
-	  dojo.connect(map.graphics, "onClick", function(e) {
-		console.log("clicked a graphic: ", e.graphic, e.graphic.attributes.id);
-	  });
-	})
-	}
 	
 	gsvc = new GeometryService("https://utility.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
 
@@ -158,6 +188,8 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 					esriMap.graphics.add(text);
 					simpGraph[name] = simp;
 					textGraph[name] = text;
+					// ADD to route lol
+					//addStop(mk_point);
 				}
 		}
 	}
@@ -234,6 +266,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 			sel_name = evt.graphic.attributes.p_name;
 			sel_placeid = evt.graphic.attributes.placeid;
 			$("#esri_sel").click();
+			console.log(sel_placeid," is selected");
 			select(sel_name);
 		}
 		//console.log(evt.graphic.attributes);
@@ -267,18 +300,5 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	$('#wrp_del').on('click', function() {
 		removeMarker(wrp_delname);
 	});
-
-	routeTask = new RouteTask("https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World");
-
-        //setup the route parameters
-        routeParams = new RouteParameters();
-        routeParams.stops = new FeatureSet();
-        routeParams.outSpatialReference = {
-          "wkid" : 102100
-        };
-
-        //routeTask.on("solve-complete", showRoute);
-        //routeTask.on("error", errorHandler);
-  
 });
 	  
