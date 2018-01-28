@@ -2,6 +2,8 @@
 <html>
   <head>
     <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
+   <link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/themes/calcite/dijit/calcite.css">
+   <link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/themes/calcite/esri/esri.css">
     <style> 
       body {
         padding: 0; 
@@ -15,6 +17,13 @@
         font-size: 18px;
         width: 97%;
         height: 2em;
+      }
+	  
+      #esri {
+         height: 100%;
+         width: 100%;
+         margin: 0;
+         padding: 0;
       }
 
       #map {
@@ -36,20 +45,26 @@
 
     </style>
 
+	
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="scripts/p5.min.js"></script>
     <script src="scripts/p5.dom.min.js"></script>
-    <script src="scripts/widget.js"></script>
     <script src="scripts/timelines.js"></script>
     <script src="scripts/sketch.js"></script>
+	
+   <script src="https://js.arcgis.com/3.23/"></script>
+    <script src="scripts/esri.js"></script>
   </head>
-  <body>
+  <body class="calcite">
 
+	
+	
    <div id="input">
       <input id="main_input" class="controls" type="text" placeholder="Enter a location">
     </div>
 
-    <div id="map_holder" style="height:100vh">
+    <div id="map_holder">
       <div id="map" stype="display:none"></div>
           <div id="infowindow-content">
 
@@ -59,12 +74,14 @@
           <span id="place-address"></span>
       </div>
     </div>
+	
 
     <script src="scripts/maphandler.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdUmVr5N1DbxjqBvLV1dAYNTZVl2FOi7I&libraries=places&callback=init" async defer></script>
 
-    <div id="center-of-page-map-goes-here"></div>
+    <div id="center-of-page-map-goes-here">
+		<div id="esri"></div></div>
     <div id="timeline-holder"></div>
-
+    
   </body>
 </html>
