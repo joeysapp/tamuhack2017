@@ -82,6 +82,8 @@ function init() {
     $('#'.concat(div_id)).css("line-height", "20px");
     $('#'.concat(div_id)).css("animation-name", 'topFadeOut');
     $('#'.concat(div_id)).css("animation-duration", "2s");
+    $('#'.concat(div_id)).css("box-shadow", "5px 5px black");
+
 
     plans.push(div_id);
 

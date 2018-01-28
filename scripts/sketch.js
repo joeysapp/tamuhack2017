@@ -1,7 +1,7 @@
 var canvas, timeline;
 var movables = []
 
-var show_hours = false;
+var show_hours = true;
 
 function setup() {
 	timeline = new Timeline();
@@ -31,7 +31,7 @@ var dragging = false;
 
 function movePlan(){
 	// console.log(this.elt);
-	select('#'.concat(this.elt.id)).position(mouseX-60, height-80);
+	select('#'.concat(this.elt.id)).position(mouseX-60, 30);
 
 
 	console.log(this.elt.id);
@@ -53,7 +53,7 @@ function keyPressed(){
 }
 
 function mousePressed(){
-	show_hours = !show_hours;
+	// show_hours = !show_hours;
 }
 // function mouseReleased(){
 // 	show_hours = false;
