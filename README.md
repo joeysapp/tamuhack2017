@@ -1,2 +1,2 @@
-# tamuhack2018
-Trip planning and Google Maps Popularity 
+# trip_planner 
+Trip planning using arcgis and Google Maps popularity metrics
