@@ -11,8 +11,8 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	    center: [30.2631898, -97.6984465], // lon, lat
 	    zoom: 5,
 	});
-	var window_x = 2*2000;
-	var window_y = 2000;
+	var window_x = 2*1650;
+	var window_y = 1650;
 	var stopSymbol = new SimpleMarkerSymbol();
 	
 	var wide_mid;
@@ -98,7 +98,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	
 	function resetBounding() {
 		var num_pts = places.length;
-		console.log(num_pts);
+		//console.log(num_pts);
 		if (num_pts == 0) {
 			esriMap.centerAndZoom(mapCenter,  10);
 			return true;
@@ -113,7 +113,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 			var e_xmin = places[0].x, e_xmax = places[0].x, e_ymin = places[0].y, e_ymax = places[0].y;
 			var tot_x = 0, tot_y = 0;
 			for(var i = 0; i < num_pts; ++i) {
-				console.log(places[i].x, places[i].y);
+				//console.log(places[i].x, places[i].y);
 				tot_x += places[i].x;
 				tot_y += places[i].y;
 				if (places[i].x < e_xmin) {
@@ -160,7 +160,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	
 
 	function select(name) {
-		console.log("selecting ", name);
+		//console.log("selecting ", name);
 		//simpGraph[name].symbol = new SimpleMarkerSymbol(selMarkerSymbol);
 		//esriMap.graphics.refresh();
 		esriMap.centerAndZoom(simpGraph[name].geometry,wide_zoom+2);
@@ -168,7 +168,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	}
 	
 	function unselect(name) {
-		console.log("unselecting ", name);
+		//console.log("unselecting ", name);
 		//simpGraph[name].symbol = new SimpleMarkerSymbol(markerSymbol);
 		//esriMap.graphics.refresh();
 		//console.log(markerSymbol.size);
@@ -179,7 +179,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 		var x = merc[0];
 		var y = merc[1];
 
-		console.log(x,y);
+		//console.log(x,y);
 
 		var place = {};
 		place.name = name;
@@ -269,7 +269,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 		}
 		
 		if (sel_name == evt.graphic.attributes.p_name) {
-			console.log("unselect2");
+			//console.log("unselect2");
 			sel_name = "";
 			$("#esri_unsel").click();
 		}
@@ -277,7 +277,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 			sel_name = evt.graphic.attributes.p_name;
 			sel_placeid = evt.graphic.attributes.placeid;
 			$("#esri_sel").click();
-			console.log(sel_placeid," is selected");
+			//console.log(sel_placeid," is selected");
 			select(sel_name);
 		}
 		if(sel_name === undefined || sel_name.length == "") {
@@ -289,7 +289,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
   
   esriMap.on("extent-change", showExtent);
   function showExtent(event){
-  console.log(event.extent);
+  //console.log(event.extent);
 	//console.log(event.extent.xmax-event.extent.xmin, event.extent.ymax-event.extent.ymin);
   }
  
@@ -309,7 +309,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	}
 	p_set.delete(name);
 	resetBounding();
-	console.log(places);
+	//console.log(places);
 }
 
 	$('#wrp_del').on('click', function() {
@@ -318,7 +318,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	
 
   esriMap.on("load", function (){
-	console.log("map loaded");
+	//console.log("map loaded");
 	connect.connect(esriMap.graphics, "onClick", myGraphicsClickHandler);
 	esriMap.centerAndZoom(mapCenter,  10);
   });
