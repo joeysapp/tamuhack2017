@@ -52,6 +52,9 @@
 	var places = [];
 	var p_set = new Set();
 	var wrp_name, wrp_lat, wrp_lng, wrp_placeid;
+	var wrp_delname;
+	var wrp_actname;
+	var sel_placeid, sel_name;
 </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="scripts/p5.min.js"></script>
@@ -66,6 +69,9 @@
 
 <div id="wrp_add" style="display:none"></div>
 <div id="wrp_del" style="display:none"></div>
+<div id="esri_sel" style="display:none"></div>
+<div id="esri_unsel" style="display:none"></div>
+<div id="esri_act" style="display:none"></div>
 	
 	
    <div id="input">
