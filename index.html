@@ -52,8 +52,8 @@
     <script src="scripts/p5.dom.min.js"></script>
     <script src="scripts/timelines.js"></script>
     <script src="scripts/sketch.js"></script>
-	
-   <script src="https://js.arcgis.com/3.23/"></script>
+    <!-- Bruce's stuff -->
+    <script src="https://js.arcgis.com/3.23/"></script>
     <script src="scripts/esri.js"></script>
   </head>
   <body class="calcite">
@@ -79,8 +79,10 @@
     <script src="scripts/maphandler.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdUmVr5N1DbxjqBvLV1dAYNTZVl2FOi7I&libraries=places&callback=init" async defer></script>
 
-    <div id="center-of-page-map-goes-here">
-		<div id="esri"></div></div>
+    <!-- Map instance -->
+		<div id="esri" style="height:580px; width:100%;"></div>
+
+    <!-- P5.js instance, handling drag/drop -->
     <div id="timeline-holder"></div>
     
   </body>

@@ -20,8 +20,8 @@
 	  ProjectParameters, Point, Extent, webMercatorUtils, SimpleMarkerSymbol, TextSymbol, Font) {
          var esriMap = new Map("esri", {
             basemap: "gray",
-            center: [-120.435, 46.159], // lon, lat
-            zoom: 7
+            center: [30.2631898, -97.6984465], // lon, lat
+            zoom: 7,
          });
 		
 		gsvc = new GeometryService("https://utility.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");

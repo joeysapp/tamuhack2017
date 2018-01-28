@@ -6,7 +6,7 @@ function setup() {
 	tl = new Timeline();
 
  	canvas = createCanvas(windowWidth, 160);
- 	background(41);
+ 	// background(41);
  	canvas.parent('timeline-holder');
 }
 
