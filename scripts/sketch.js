@@ -4,10 +4,10 @@ var movables = []
 var show_hours = true;
 
 function setup() {
-	timeline = new Timeline();
+	timeline = new Timeline(windowWidth, constrain(windowHeight/4, 120, 10000));
 
- 	canvas = createCanvas(windowWidth, windowHeight/32);
- 	canvas.parent('timeline');
+ 	canvas = createCanvas(windowWidth, constrain(windowHeight/4, 120, 10000));
+	canvas.parent('timeline');
  	canvas.id('timeline-sketch');
 }
 
@@ -40,8 +40,9 @@ function movePlan(){
 }
 
 function windowResized() {
-	resizeCanvas(windowWidth, windowHeight/4);
+	resizeCanvas(windowWidth, constrain(windowHeight/4, 120, 10000));
 	timeline.w = windowWidth;
+	timeline.h = constrain(windowHeight/4, 120, 10000);
 }
 
 function keyPressed(){

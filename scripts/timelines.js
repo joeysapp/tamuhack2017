@@ -1,7 +1,7 @@
 // Remember plans = [ ... ]
-function Timeline() {
-	this.w = windowWidth;
-	this.h = 160;
+function Timeline(t_x, t_y) {
+	this.w = t_x;
+	this.h = t_y;
 	this.hours = [];
 	this.hour_idx = -1;
 
