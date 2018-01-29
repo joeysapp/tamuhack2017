@@ -6,8 +6,9 @@ var show_hours = true;
 function setup() {
 	timeline = new Timeline();
 
- 	canvas = createCanvas(windowWidth, 160);
- 	canvas.parent('timeline-holder');
+ 	canvas = createCanvas(windowWidth, windowHeight/32);
+ 	canvas.parent('timeline');
+ 	canvas.id('timeline-sketch');
 }
 
 function draw() {
@@ -39,7 +40,7 @@ function movePlan(){
 }
 
 function windowResized() {
-	resizeCanvas(windowWidth, 160);
+	resizeCanvas(windowWidth, windowHeight/4);
 	timeline.w = windowWidth;
 }
 

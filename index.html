@@ -1,142 +1,81 @@
 <!DOCTYPE html>
-
-
 <html>
   <head>
     <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
    <link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/themes/calcite/dijit/calcite.css">
    <link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/themes/calcite/esri/esri.css">
-    <style> 
 
-    @keyframes topFadeOut {
-        0% {
-          position: absolute;
-          top: -3em;
-          opacity: 0;
-        }
+   <link rel="stylesheet" href="styles/main.css" title="external style sheet">
+  <style src="scripts/main.css"></style>
 
-        50% {
-          position: absolute;
-          top: -1.5em;
-          opacity: 0.5;
-        }
+  <script>
+  	// GLOBAL VARS LELE
+  	var keys = {};
+  	window.onkeyup = function(e) { keys[e.keyCode] = false; }
+  	window.onkeydown = function(e) { keys[e.keyCode] = true; }
+  	var places = [];
+  	var p_set = new Set();
+  	var wrp_name, wrp_lat, wrp_lng, wrp_placeid;
+  	var wrp_delname;
+  	var wrp_actname;
+  	var sel_placeid, sel_name;
+  	
+  	var keys = {};
+  	window.onkeyup = function(e) { keys[e.keyCode] = false; }
+  	window.onkeydown = function(e) { keys[e.keyCode] = true; }
 
-        100% {
-          opacity: 1;
-        }
-      }
-      body {
-        padding: 0; 
-        margin: 0;
-      } 
+    var plans = [];
+  </script>
 
-      input {
-        margin-top:12px;
-        margin-left:12px;
-        padding:8px;
-        font-size: 18px;
-        width: 97%;
-        height: 2em;
-      }
-	  
-      #esri {
-         height: 600px;
-         width: 100%;
-         margin: 0;
-         padding: 0;
-      }
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="scripts/p5.min.js"></script>
+  <script src="scripts/p5.dom.min.js"></script>
+  <script src="scripts/timelines.js"></script>
+  <script src="scripts/sketch.js"></script>
 
-      #map {
-        display: none;
-        height: 100%;
-      }
-
-      #timeline-holder {
-        position: absolute; bottom: 0px; 
-
-      }
-
-      #infowindow-content {
-        display: none;
-      }
-      #map #infowindow-content {
-        display: inline;
-      }
-
-    </style>
-
-	
-
-<script>
-	// GLOBAL VARS LELE
-	var keys = {};
-	window.onkeyup = function(e) { keys[e.keyCode] = false; }
-	window.onkeydown = function(e) { keys[e.keyCode] = true; }
-	var places = [];
-	var p_set = new Set();
-	var wrp_name, wrp_lat, wrp_lng, wrp_placeid;
-	var wrp_delname;
-	var wrp_actname;
-	var sel_placeid, sel_name;
-	
-	var keys = {};
-	window.onkeyup = function(e) { keys[e.keyCode] = false; }
-	window.onkeydown = function(e) { keys[e.keyCode] = true; }
-
-  var plans = [];
-</script>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script src="scripts/p5.min.js"></script>
-    <script src="scripts/p5.dom.min.js"></script>
-    <script src="scripts/timelines.js"></script>
-    <script src="scripts/sketch.js"></script>
-
-
-
-    <!-- Bruce's stuff -->
-    <script src="https://js.arcgis.com/3.23/"></script>
-    <script src="scripts/esri.js"></script>
-
-
+  <!-- Bruce's stuff -->
+  <script src="https://js.arcgis.com/3.23/"></script>
+  <script src="scripts/esri.js"></script>
 
   </head>
   <body class="calcite">
 
-<div id="wrp_add" style="display:none"></div>
-<div id="wrp_del" style="display:none"></div>
-<div id="esri_sel" style="display:none"></div>
-<div id="esri_unsel" style="display:none"></div>
-<div id="esri_act" style="display:none"></div>
+  <!-- I think these are methods Bruce uses to talk to esri? -->
+  <div id="wrp_add" style="display:none"></div>
+  <div id="wrp_del" style="display:none"></div>
+  <div id="esri_sel" style="display:none"></div>
+  <div id="esri_unsel" style="display:none"></div>
+  <div id="esri_act" style="display:none"></div>
 	
+<!--    <div id="search_box">
+ -->      
+
+ <input id="search_box" type="text" placeholder="Enter a location">
+  <!-- </div> -->
+
+  <div id="map_holder" style="display: none">
+    <div id="map" style="display: none"></div>
+        <!-- Overall window that is above a marker -->
+        <!-- We would probably have to change this to look correctly -->
+        <div id="infowindow-content">
+
+        <!-- Provided we get esri working, this can still be used -->
+        <span id="place-name"  class="title"></span><br>
+        <span id="place-id"></span><br>
+        <span id="place-address"></span>
+    </div>
+  </div>
 	
-   <div id="input">
-      <input id="main_input" class="controls" type="text" placeholder="Enter a location">
-    </div>
+  <!-- This is for the search bar. -->
+  <script src="scripts/maphandler.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdUmVr5N1DbxjqBvLV1dAYNTZVl2FOi7I&libraries=places&callback=init" async defer></script>
 
-    <div id="map_holder">
-      <div id="map" stype="display:none"></div>
-          <div id="infowindow-content">
+  <!-- Map instance -->
+	<div id="esri" style="height:100vh; width:100%"></div>
 
-          <!-- Provided we get esri working, this can still be used -->
-          <span id="place-name"  class="title"></span><br>
-          <span id="place-id"></span><br>
-          <span id="place-address"></span>
-      </div>
-    </div>
-	
-
-    <script src="scripts/maphandler.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdUmVr5N1DbxjqBvLV1dAYNTZVl2FOi7I&libraries=places&callback=init" async defer></script>
-
-    <!-- Map instance -->
-		<div id="esri" style="height:100vh; width:100%;"></div>
-
-    <!-- P5.js instance, handling drag/drop -->
-    <div id="timeline-holder">
-      
-
-    </div>
+  <!-- P5.js instance, handling drag/drop -->
+  <!-- As well as a lot of helper interactivity in places -->
+  <div id="timeline"></div>
     
   </body>
 </html>

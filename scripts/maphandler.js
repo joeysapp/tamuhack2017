@@ -4,7 +4,7 @@ function init() {
     zoom: 12
   });
 
-  var input = document.getElementById('main_input');
+  var input = document.getElementById('search_box');
 
   var autocomplete = new google.maps.places.Autocomplete(input);
 
@@ -68,21 +68,8 @@ function init() {
     var name_event = wrp_name.slice(0, 20);
 
     $('#timeline-holder').append('<div id='.concat(div_id).concat('>').concat(name_event).concat('</div>'));   
-    $('#'.concat(div_id)).css("position","absolute");
-    $('#'.concat(div_id)).css("top","30px");
+    // Placing the new div in the correct place!
     $('#'.concat(div_id)).css("left",free_pos.concat("px"));
-    $('#'.concat(div_id)).css("color", "white");
-    $('#'.concat(div_id)).css("font-size", "12px");
-    $('#'.concat(div_id)).css("background-color", "grey");
-    $('#'.concat(div_id)).css("height", "2em");
-    $('#'.concat(div_id)).css("width", "12em");
-    $('#'.concat(div_id)).css("text-align", "center");
-    $('#'.concat(div_id)).css("vertical-align", "middle");
-    $('#'.concat(div_id)).css("text-decoration", "underline");
-    $('#'.concat(div_id)).css("line-height", "20px");
-    $('#'.concat(div_id)).css("animation-name", 'topFadeOut');
-    $('#'.concat(div_id)).css("animation-duration", "2s");
-    $('#'.concat(div_id)).css("box-shadow", "5px 5px black");
 
 
     plans.push(div_id);
