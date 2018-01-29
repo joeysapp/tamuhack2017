@@ -26,7 +26,9 @@ function init() {
   autocomplete.addListener('place_changed', function() {
     infowindow.close();
     var place = autocomplete.getPlace();
-    console.log(place);
+
+    // See what exactly a 'place' obj is
+    // console.log(place);
     if (!place.geometry) {
       return;
     }
@@ -52,7 +54,6 @@ function init() {
     // Data used for stuff, place_id!
     data = {}
     data['place'] = place.place_id;
-    console.log(place.place_id);
 
       // bruce's esri stuff goes here
     wrp_name = place.name;
@@ -67,9 +68,14 @@ function init() {
     var div_id = "event-"+ct.toString();
     var name_event = wrp_name.slice(0, 20);
 
-    $('#timeline-holder').append('<div id='.concat(div_id).concat('>').concat(name_event).concat('</div>'));   
+    // var unique_div_id = '<div id='.concat(div_id).concat('>').concat(name_event).concat('</div>');
+
+    // $('#timeline').append(unique_div_id);   
     // Placing the new div in the correct place!
-    $('#'.concat(div_id)).css("left",free_pos.concat("px"));
+    // $('#'.concat(unique_div_id)).css("left",free_pos.concat("px"));
+
+    // Doing this with p5!
+    timeline.placePlan(free_pos, div_id);
 
 
     plans.push(div_id);
@@ -83,7 +89,7 @@ function init() {
         data: JSON.stringify(data),
         success: function (msg, status, jqXHR){
           timeline.hours.push(msg['data'])
-          console.log(timeline.hours);
+          // console.log(timeline.hours);
           timeline.hour_idx += 1;
 
         },

@@ -5,6 +5,25 @@ function Timeline(t_x, t_y) {
 	this.hours = [];
 	this.hour_idx = -1;
 
+	this.movePlan = function(){
+		console.log('mfo');
+		// select('#'.concat(this.elt.id)).position(mouseX-60, 30);
+		// console.log(this.elt.id);
+		// timeline.hour_idx = parseInt(this.elt.id.split("-")[1]);
+	}
+
+	this.placePlan = function(x, id){
+		var tmp = createDiv(x, height/2);
+		console.log("huh this is odd");
+		tmp.id(id);
+		tmp.mouseClicked(this.movePlan);
+		tmp.class('timeline-holder');
+		// tmp.parent(timeline);
+	}
+
+
+
+
 	this.display = function(){
 
 		// Base layer
@@ -36,6 +55,9 @@ function Timeline(t_x, t_y) {
 
 			stroke(20, 240, 20, 150);
 			strokeWeight(4);
+			if (this.hours == []){
+				return;
+			}
 			for (step = 1; step < 23; step++) {
 				line(x, this.h - 25 + map(this.hours[this.hour_idx][constrain(step-1, 0, 24)], 0, 100, 0, -120), x + width/24, this.h - 25 + map(this.hours[this.hour_idx][step], 0, 100, 0, -120));
 				x += width/24;
