@@ -55,12 +55,8 @@ function init() {
     data = {}
     data['place'] = place.place_id;
 
-      // bruce's esri stuff goes here
-    wrp_name = place.name;
-    wrp_lng = place.geometry.location.lng();
-    wrp_lat = place.geometry.location.lat();
-    wrp_placeid = place.place_id;
-    $("#wrp_add").click();
+      // esri -- add new map marker
+	$("#esri").trigger("esri_add_marker", [ place.geometry.location.lng(), place.geometry.location.lat(), place.name, place.place_id] );
 
 
     var free_pos = (Math.random()*(width-50)).toString();
@@ -76,7 +72,6 @@ function init() {
 
     // Doing this with p5!
     timeline.placePlan(free_pos, div_id);
-
 
     plans.push(div_id);
 

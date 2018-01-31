@@ -18,6 +18,13 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	var wide_mid;
 	var wide_zoom;
 	
+	var places = [];
+	var p_set = new Set();
+	
+	var austin = new SpatialReference(102100);
+	var mapCenter = new Point(-10880699.875412026, 3537992.625178636, austin);
+	
+	var fakeOrder = 1;
 
 	routeTask = new RouteTask("https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World");
 
@@ -79,6 +86,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	var labelFont = new Font();
 
 	var textColor = Color.fromString("rgb(255,255,255)");
+	var textColorDark = Color.fromString("rgb(0,0,0)");
 	var markerColor = Color.fromString("rgb(212,0,12)");
 	var actColor = Color.fromString("rgb(212,0,12)");
 	
@@ -199,6 +207,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 		place.lng = longitude;
 		place.lat = latitude;
 		place.placeid = placeid;
+		
 		if(!p_set.has(place.name)) {
 				// INTERNAL BOOKKEEPING
 				p_set.add(place.name);
@@ -216,12 +225,16 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 					var g_attr = {"placeid": placeid, "p_name":place.name};
 					var mk_point = new Point(x,y,esriMap.spatialReference);
 					var simp = new Graphic(mk_point,markerSymbol,g_attr);
-					var label = new TextSymbol(name[0],labelFont,textColor).setOffset(0,-4.5).setAlign(TextSymbol.ALIGN_MIDDLE);
-					var text = new Graphic(mk_point,label,g_attr)
+					var order = new TextSymbol(fakeOrder.toString(),labelFont,textColor).setOffset(0,-4.5).setAlign(TextSymbol.ALIGN_MIDDLE);
+					var label = new TextSymbol(place.name,labelFont,textColorDark).setOffset(15,-4.5).setAlign(TextSymbol.ALIGN_START);
+					fakeOrder += 1;
+					var num = new Graphic(mk_point,order,g_attr)
+					var name_lab = new Graphic(mk_point,label,g_attr)
 					esriMap.graphics.add(simp);
-					esriMap.graphics.add(text);
+					esriMap.graphics.add(name_lab);
+					esriMap.graphics.add(num);
 					simpGraph[name] = simp;
-					textGraph[name] = text;
+					textGraph[name] = num;
 					
 					if(sel_name !== undefined && sel_name.length > 0) {
 						unselect(sel_name);
@@ -231,47 +244,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 				}
 		}
 	}
-
-	$("#wrp_add").on("click", function() {
-		addMarker(wrp_lng,wrp_lat,wrp_name,wrp_placeid);
-	});
 	
-
-	var austin = new SpatialReference(102100);
-	var mapCenter = new Point(-10880699.875412026, 3537992.625178636, austin);
-
-	/*
-	function activate(name) {
-		var old_pt = new Point(simpGraph[name].geometry);
-		var g_attr = simpGraph[name].attributes;
-		//console.log(old_pt,g_attr);
-		esriMap.graphics.remove(simpGraph[name]);
-		esriMap.graphics.remove(textGraph[name]);
-		var label = new TextSymbol(name[0],labelFont,textColor).setOffset(0,-4.5).setAlign(TextSymbol.ALIGN_MIDDLE);
-		var text = new Graphic(old_pt,label,g_attr);
-		esriMap.graphics.add(text);
-		var simp;
-		if (sel_name == name) {
-			simp = new Graphic(old_pt,actSelMarkerSymbol,g_attr);
-		} else {
-			simp = new Graphic(old_pt,actMarkerSymbol,g_attr);
-		}
-		esriMap.graphics.add(simp);
-		simpGraph[name] = simp;
-		textGraph[name] = text;
-		act_name.add(name);
-	}
-	
-	$("#esri_act").on('click', function() {
-		activate(wrp_actname);
-	});
-	
-	
-	function unactivate(name) {
-		simpGraph[name].symbol.setColor(markerColor);
-		esriMap.graphics.refresh();
-	}*/
-  
   function myGraphicsClickHandler(evt) {
 		if(keys[13]) removeMarker(evt.graphic.attributes.p_name);
 		else {
@@ -298,11 +271,6 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 		}
   }
   
-  esriMap.on("extent-change", showExtent);
-  function showExtent(event){
-  //console.log(event.extent);
-	//console.log(event.extent.xmax-event.extent.xmin, event.extent.ymax-event.extent.ymin);
-  }
  
 // JOEY USE THIS
   function removeMarker(name) {
@@ -323,16 +291,28 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	//console.log(places);
 }
 
-	$('#wrp_del').on('click', function() {
-		removeMarker(wrp_delname);
-	});
-	
+  esriMap.on("extent-change", showExtent);
+  function showExtent(event){
+  //console.log(event.extent);
+	//console.log(event.extent.xmax-event.extent.xmin, event.extent.ymax-event.extent.ymin);
+  }
 
   esriMap.on("load", function (){
 	//console.log("map loaded");
 	connect.connect(esriMap.graphics, "onClick", myGraphicsClickHandler);
 	esriMap.centerAndZoom(shiftCenter(mapCenter,  10),10);
   });
+  
+	// INERACTION WITH OTHER PARTS OF THE PROGRAM
+	$('#wrp_del').on('click', function() {
+		removeMarker(wrp_delname);
+	});
+	
+	// add marker from maphandler.js
+	$("#esri").on("esri_add_marker", function(evt,longitude,latitude,name,placeid) {
+		addMarker(longitude,latitude,name,placeid);
+	});
+	
 	
 });
 	  
