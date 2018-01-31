@@ -2,40 +2,44 @@
 <html>
   <head>
     <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
-   <link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/themes/calcite/dijit/calcite.css">
-   <link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/themes/calcite/esri/esri.css">
 
-   <link rel="stylesheet" href="styles/main.css" title="external style sheet">
-  <style src="scripts/main.css"></style>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/themes/calcite/dijit/calcite.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/themes/calcite/esri/esri.css">
 
-  <script>
-  	// GLOBAL VARS LELE
-  	var keys = {};
-  	window.onkeyup = function(e) { keys[e.keyCode] = false; }
-  	window.onkeydown = function(e) { keys[e.keyCode] = true; }
-  	var places = [];
-  	var p_set = new Set();
-  	var wrp_name, wrp_lat, wrp_lng, wrp_placeid;
-  	var wrp_delname;
-  	var wrp_actname;
-  	var sel_placeid, sel_name;
-  	
-  	var keys = {};
-  	window.onkeyup = function(e) { keys[e.keyCode] = false; }
-  	window.onkeydown = function(e) { keys[e.keyCode] = true; }
+    <link rel="stylesheet" href="resources/css/main.css">
+    <link rel="stylesheet" href="vendors/jquery/jquery.mobile-git.min.css">
 
-    var plans = [];
-  </script>
+    <script>
+    	// GLOBAL VARS LELE
+    	var keys = {};
+    	window.onkeyup = function(e) { keys[e.keyCode] = false; }
+    	window.onkeydown = function(e) { keys[e.keyCode] = true; }
+    	var places = [];
+    	var p_set = new Set();
+    	var wrp_name, wrp_lat, wrp_lng, wrp_placeid;
+    	var wrp_delname;
+    	var wrp_actname;
+    	var sel_placeid, sel_name;
+    	
+    	var keys = {};
+    	window.onkeyup = function(e) { keys[e.keyCode] = false; }
+    	window.onkeydown = function(e) { keys[e.keyCode] = true; }
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-  <script src="scripts/p5.min.js"></script>
-  <script src="scripts/p5.dom.min.js"></script>
-  <script src="scripts/timelines.js"></script>
-  <script src="scripts/sketch.js"></script>
+      var plans = [];
+    </script>
 
-  <!-- Bruce's stuff -->
-  <script src="https://js.arcgis.com/3.23/"></script>
-  <script src="scripts/esri.js"></script>
+    <script src="vendors/jquery/jquery-git.min.js"></script>
+    <script src="vendors/jquery/jquery-ui.min.js"></script>
+
+    <script src="vendors/p5/p5.min.js"></script>
+    <script src="vendors/p5/p5.dom.min.js"></script>
+
+    <script src="resources/js/timelines.js"></script>
+    <script src="resources/js/sketch.js"></script>
+
+    <!-- Bruce's stuff -->
+    <script src="https://js.arcgis.com/3.23/"></script>
+    <script src="resources/js/esri.js"></script>
 
   </head>
   <body class="calcite">
@@ -46,9 +50,7 @@
   <div id="esri_sel" style="display:none"></div>
   <div id="esri_unsel" style="display:none"></div>
   <div id="esri_act" style="display:none"></div>
-	
-<!--    <div id="search_box">
- -->      
+	  
 
  <input id="search_box" type="text" placeholder="Enter a location">
   <!-- </div> -->
@@ -67,7 +69,7 @@
   </div>
 	
   <!-- This is for the search bar. -->
-  <script src="scripts/maphandler.js"></script>
+  <script src="resources/js/maphandler.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdUmVr5N1DbxjqBvLV1dAYNTZVl2FOi7I&libraries=places&callback=init" async defer></script>
 
   <!-- Map instance -->
