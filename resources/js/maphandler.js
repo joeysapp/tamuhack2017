@@ -62,7 +62,7 @@ function init() {
     var free_pos = (Math.random()*(width-50)).toString();
     var ct = plans.length;
     var div_id = "event-"+ct.toString();
-    var name_event = wrp_name.slice(0, 20);
+    var name_event = place.name.slice(0, 20);
 
     // var unique_div_id = '<div id='.concat(div_id).concat('>').concat(name_event).concat('</div>');
 

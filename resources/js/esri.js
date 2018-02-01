@@ -1,9 +1,9 @@
 
 require(
-	["esri/map","dojo/_base/connect","esri/Color","esri/dijit/Search","esri/SpatialReference","esri/graphic","esri/tasks/GeometryService","esri/tasks/ProjectParameters","esri/geometry/Point","esri/geometry/Extent",
+	["esri/map","esri/arcgis/OAuthInfo","esri/IdentityManager","dojo/_base/connect","esri/layers/GraphicsLayer","esri/Color","esri/dijit/Search","esri/SpatialReference","esri/geometry/Polyline","esri/graphic","esri/tasks/GeometryService","esri/tasks/ProjectParameters","esri/geometry/Point","esri/geometry/Extent",
         "esri/tasks/RouteTask", "esri/tasks/RouteParameters","esri/geometry/webMercatorUtils", "esri/tasks/FeatureSet", "esri/symbols/SimpleMarkerSymbol",
         "esri/symbols/SimpleLineSymbol", "esri/symbols/TextSymbol","esri/symbols/Font","dojo/domReady!"
-], function (Map, connect, Color, Search, SpatialReference, Graphic, GeometryService, 
+], function (Map, OAuthInfo, esriId, connect, GraphicsLayer, Color, Search, SpatialReference, Polyline, Graphic, GeometryService, 
 ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, FeatureSet, SimpleMarkerSymbol, SimpleLineSymbol,  TextSymbol, Font) {
 	var esriMap = new Map("esri", {
 	    basemap: "streets",
@@ -25,15 +25,58 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	var mapCenter = new Point(-10880699.875412026, 3537992.625178636, austin);
 	
 	var fakeOrder = 1;
+	
+		var proxy = "https://utility.arcgis.com/usrsvcs/appservices/wW3r3nENTyFGyBGm/rest/services/World/Route/NAServer/Route_World/solve?"
+	
+	
+	
+	function getValues(myUrl){
+		 $.ajax({
+			url: proxy + myUrl,
+			type: 'get',
+			dataType: 'json',
+			cache: false,
+			success: postProcessing,
+			async:true,
+			});
+	};
+	
+	var routeLayer = new esri.layers.GraphicsLayer();
+	esriMap.addLayer(routeLayer);
+	var lineSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,new Color([255,0,0]),4);
+	
+	function drawRoute(p,q) {
+		var pathsXY = [[[p.x,p.y],[q.x,q.y]]];
+		var singlePathPolyline = new Polyline(pathsXY);
+	  var polylineGraphic = new Graphic(singlePathPolyline, lineSymbol);
+	  //console.log(pathsXY);
+	  esriMap.graphics.add(polylineGraphic);
+	  console.log(polylineGraphic);
+		
+		suffix = "stops=";
+		suffix += p.lng.toString() + "," + p.lat.toString() + ";" + q.lng.toString() + ","  + q.lat.toString();
+		suffix += "&f=json"
+		console.log(suffix);
+		getValues(suffix);
 
-	routeTask = new RouteTask("https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World");
-
-        //setup the route parameters
-        routeParams = new RouteParameters();
-        routeParams.stops = new FeatureSet();
-        routeParams.outSpatialReference = {
-          "wkid" : 102100
-        };
+	};
+	//getValues("stops=-117.1957,34.0564;-117.184,34.0546&f=json");
+	
+	function postProcessing(data) {
+		//console.log(data.routes.features[0].geometry.paths[0]);
+		var pathsLngLat = data.routes.features[0].geometry.paths[0];
+		var pathsXY = [];
+		for (var i = 0; i < pathsLngLat.length; ++i) {
+			pathsXY.push(webMercatorUtils.lngLatToXY(pathsLngLat[i][0],pathsLngLat[i][1]));
+		}
+		var singlePathPolyline = new Polyline(pathsXY);
+		singlePathPolyline.setSpatialReference(esriMap.spatialReference);
+		  var polylineGraphic = new Graphic(singlePathPolyline,lineSymbol);
+		 // console.log(pathsXY);
+		  routeLayer.add(polylineGraphic);
+	};
+		
+		//https://utility.arcgis.com/usrsvcs/appservices/wW3r3nENTyFGyBGm/rest/services/World/Route/NAServer/Route_World/solve?stops=-117.1957,34.0564;-117.184,34.0546&f=json
 	
 	function shiftCenter(point,zoom) {
 		var pow = zoom - 8;
@@ -45,33 +88,6 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 		}
 		return new Point(point.x,point.y-delt,esriMap.spatialReference);
 	};
-	
-	function addStop(point) {
-          var stop = esriMap.graphics.add(new Graphic(point, stopSymbol));
-          routeParams.stops.features.push(stop);
-
-          if (routeParams.stops.features.length >= 2) {
-            routeTask.solve(routeParams);
-            lastStop = routeParams.stops.features.splice(0, 1)[0];
-          }
-    }
-        //Adds the solved route to the map as a graphic
-        function showRoute(evt) {
-          map.graphics.add(evt.result.routeResults[0].route.setSymbol(routeSymbol));
-        }
-
-        //Displays any error returned by the Route Task
-        function errorHandler(err) {
-          alert("An error occured\n" + err.message + "\n" + err.details.join("\n"));
-
-          routeParams.stops.features.splice(0, 0, lastStop);
-          map.graphics.remove(routeParams.stops.features.splice(1, 1)[0]);
-        }
-		
-		
-     routeTask.on("solve-complete", showRoute);
-     routeTask.on("error", errorHandler);
-  
 	
 	var textGraph = {};
 	var simpGraph = {};
@@ -95,7 +111,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	
 	selMarkerSymbol.setColor(markerColor);
 	selMarkerSymbol.setSize(selSize);
-	selMarkerSymbol.outline.setColor(textColor);
+	selMarkerSymbol.outline.setColor(markerColor);
 	
 	actMarkerSymbol.setColor(actColor);
 	actMarkerSymbol.setSize(markerSize);
@@ -107,7 +123,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	
 	markerSymbol.setColor(markerColor);
 	markerSymbol.setSize(markerSize);
-	markerSymbol.outline.setColor(textColor);
+	markerSymbol.outline.setColor(markerColor);
 
 	labelFont.setFamily("Arial");
 	labelFont.setWeight(Font.WEIGHT_BOLD);
@@ -240,7 +256,10 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 						unselect(sel_name);
 					}
 					// ADD to route lol
-					//addStop(mk_point);
+					
+					if(places.length > 1) {
+						drawRoute(places[places.length - 2], places[places.length - 1]);
+					}
 				}
 		}
 	}
@@ -301,6 +320,27 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	//console.log("map loaded");
 	connect.connect(esriMap.graphics, "onClick", myGraphicsClickHandler);
 	esriMap.centerAndZoom(shiftCenter(mapCenter,  10),10);
+	
+	/*
+	var center = new Point(-10880699.875412026, 3537992.625178636);
+	center.setSpatialReference(esriMap.spatialReference);
+	var myGraphic2 = new Graphic(center, stopSymbol);
+	esriMap.graphics.add(myGraphic2);
+	
+	var center = new Point(-10877600.74, 3550057.80);
+	center.setSpatialReference(esriMap.spatialReference);
+	var myGraphic2 = new Graphic(center, stopSymbol);
+	esriMap.graphics.add(myGraphic2);
+	
+	var polyLine = new Polyline([[-10880699.875412026, 3537992.625178636],[-10877600.74, 3550057.80]]);
+	polyLine.setSpatialReference(esriMap.spatialReference);
+	var myGraphic = new Graphic(polyLine, lineSymbol);
+	console.log(myGraphic);
+	esriMap.graphics.add(myGraphic);
+	*/
+	
+	//esriMap.setExtent(myGraphic.geometry.cache._extent);
+	
   });
   
 	// INERACTION WITH OTHER PARTS OF THE PROGRAM
