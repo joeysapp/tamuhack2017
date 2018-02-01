@@ -36,10 +36,14 @@ function Timeline(t_x, t_y) {
 		tmp.style('height', '100%');
 		tmp.style('width', '15%');
 		tmp.style('padding', '0.5em');
+		tmp.style('margin', '2em');
 		tmp.style('display', 'inline-block');
 
 		// jQuery events
-		$('#'+id).draggable();
+		$('#'+id).draggable({
+			axis: 'x',
+			containment: 'parent'
+		});
 	}
 
 
