@@ -32,9 +32,10 @@ function draw() {
 var dragging = false;
 
 function windowResized() {
-	resizeCanvas(windowWidth, constrain(windowHeight/4, 120, 10000));
-	timeline.w = windowWidth;
-	timeline.h = constrain(windowHeight/4, 120, 10000);
+	// resizeCanvas(windowWidth, constrain(windowHeight/4, 120, 10000));
+	// timeline.w = windowWidth;
+	// timeline.h = constrain(windowHeight/4, 120, 10000);
+	timeline.c.size(windowWidth, windowHeight*0.2)
 }
 
 function keyPressed(){

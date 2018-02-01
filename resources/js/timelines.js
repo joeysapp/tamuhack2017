@@ -63,7 +63,7 @@ function Timeline(t_x, t_y) {
 
 
 	this.display = function(){
-		rect(0, 0, width-1, height-1);
+		rect(0, 0, this.c.width-1, this.c.height-1);
 	
 		
 	}
