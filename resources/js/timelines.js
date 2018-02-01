@@ -69,10 +69,8 @@ function Timeline(t_x, t_y) {
 
 		button.mouseClicked(function(e){
 			// Function to remove the element - maybe a helper fn for this
-			// button.parent().remove();
-			console.log("removing", name);
 			$("#esri").trigger("esri_rem_marker", [ name ]);
-			// button.parent().remove();
+			button.parent().remove();
 		})
 
 	}

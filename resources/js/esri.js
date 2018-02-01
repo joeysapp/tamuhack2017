@@ -291,7 +291,6 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
  
 // JOEY USE THIS
   function removeMarker(name) {
-  	console.log("esri.removeMarker(",name,")");
 	if(sel_name == name) {
 		sel_name == "";
 	}
@@ -352,7 +351,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 		addMarker(longitude,latitude,name,placeid);
 	});
 	
-	$("#esri").on("esri_rem_marker", function(name) {
+	$("#esri").on("esri_rem_marker", function(evt, name) {
 		removeMarker(name);
 	});
 	
