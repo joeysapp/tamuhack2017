@@ -29,10 +29,9 @@ function Timeline(t_x, t_y) {
 	this.placePlan = function(x, id, name){
 		var tmp = createDiv(name);
 		tmp.id(id);
-		tmp.mouseClicked(this.movePlan);
 		tmp.parent('timeline-holder');	
 
-		tmp.style("top", "0px");
+		tmp.style("top", "0");
 		tmp.style("position", "absolute");
 
 		tmp.style('background-color', 'white');
@@ -42,21 +41,37 @@ function Timeline(t_x, t_y) {
 		tmp.style('z-index', '6');
 		// tmp.center();
 
-		console.log(tmp.elt);
+		tmp.style("font-size", "12pt");
+		tmp.style("margin", "5%");
+		tmp.style("width", "15vh");
+		tmp.style("height", "12vh");
+		tmp.style("text-align", "center");
 
-
-		tmp.style('padding', '5%');
-		tmp.style('margin', '5%');
 		tmp.style('border-style', 'solid');
 		tmp.style('border-color', '2px 2px black');
 		tmp.style('box-shadow', '3px 3px black');
-
 
 		// jQuery events
 		$('#'+id).draggable({
 			axis: 'x',
 			containment: 'parent'
 		});
+
+		tmp.mouseClicked(function(e){
+			console.log("boo", e);
+		});
+
+		var button = createButton('x');
+		button.parent(tmp);
+		button.style('right', '0px');
+		button.style('top', '0px');
+		button.style('position', 'absolute');
+
+		button.mouseClicked(function(e){
+			button.parent().remove();
+			console.log("hey");
+		})
+
 	}
 
 
