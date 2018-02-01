@@ -58,7 +58,7 @@ function Timeline(t_x, t_y) {
 		});
 
 		tmp.mouseClicked(function(e){
-			console.log("boo", e);
+			// console.log("boo", e);
 		});
 
 		var button = createButton('x');
@@ -68,14 +68,14 @@ function Timeline(t_x, t_y) {
 		button.style('position', 'absolute');
 
 		button.mouseClicked(function(e){
-			button.parent().remove();
-			console.log("hey");
+			// Function to remove the element - maybe a helper fn for this
+			// button.parent().remove();
+			console.log("removing", name);
+			$("#esri").trigger("esri_rem_marker", [ name ]);
+			// button.parent().remove();
 		})
 
 	}
-
-
-
 
 	this.display = function(){
 		rect(0, 0, this.c.width-1, this.c.height-1);

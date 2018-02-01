@@ -26,9 +26,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 	
 	var fakeOrder = 1;
 	
-		var proxy = "https://utility.arcgis.com/usrsvcs/appservices/wW3r3nENTyFGyBGm/rest/services/World/Route/NAServer/Route_World/solve?"
-	
-	
+	var proxy = "https://utility.arcgis.com/usrsvcs/appservices/wW3r3nENTyFGyBGm/rest/services/World/Route/NAServer/Route_World/solve?"
 	
 	function getValues(myUrl){
 		 $.ajax({
@@ -293,6 +291,7 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
  
 // JOEY USE THIS
   function removeMarker(name) {
+  	console.log("esri.removeMarker(",name,")");
 	if(sel_name == name) {
 		sel_name == "";
 	}
@@ -353,6 +352,9 @@ ProjectParameters, Point, Extent, RouteTask, RouteParameters, webMercatorUtils, 
 		addMarker(longitude,latitude,name,placeid);
 	});
 	
+	$("#esri").on("esri_rem_marker", function(name) {
+		removeMarker(name);
+	});
 	
 });
 	  
