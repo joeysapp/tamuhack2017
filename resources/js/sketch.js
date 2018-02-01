@@ -4,11 +4,12 @@ var movables = []
 var show_hours = true;
 
 function setup() {
-	timeline = new Timeline(windowWidth, constrain(windowHeight/4, 120, 10000));
+	timeline = new Timeline();
 
- 	canvas = createCanvas(windowWidth, constrain(windowHeight/4, 120, 10000));
-	canvas.parent('timeline');
- 	canvas.id('timeline-sketch');
+	// timeline.c.parent('timeline-holder');
+ 	// canvas = createCanvas(windowWidth, windowHeight);
+	// canvas.parent('timeline-holder');
+ // 	canvas.id('timeline-sketch');
 }
 
 function draw() {

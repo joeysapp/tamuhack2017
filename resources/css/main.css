@@ -54,12 +54,12 @@ body {
   height: 100%;
 }
 
-#timeline {
-  bottom: 20%;
+#timeline-holder {
+  bottom: 0%;
   width: 100%;
 
   position: absolute;
-
+  display: inline-block;
   float: right;  
   z-index: 3;
 
@@ -77,7 +77,7 @@ body {
 }
 
 /* These are used for the funny little plan boxes that hover over timeline. */
-.timeline-holder {
+/*.timeline-holder {
   position:absolute;
   bottom:10%;
   color: white;
@@ -97,6 +97,6 @@ body {
 
   float: right;  
   z-index: 4;
-}
+}*/
 
 

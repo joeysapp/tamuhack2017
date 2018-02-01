@@ -1,24 +1,45 @@
 // Remember plans = [ ... ]
 function Timeline(t_x, t_y) {
+	this.c = createCanvas(windowWidth, windowHeight/4);
 	this.w = t_x;
 	this.h = t_y;
 	this.hours = [];
 	this.hour_idx = -1;
+	this.c.parent('timeline-holder');
+	this.c.id('timeline-div');
+	this.c.style('inline-block');
+
+
+	this.c.mouseClicked(function(e){
+		console.log(e);
+	})
+
+
 
 	this.movePlan = function(){
-		console.log('mfo');
+		// Make the timeline visible here?
+		// console.log('mfo');
+		
 		// select('#'.concat(this.elt.id)).position(mouseX-60, 30);
 		// console.log(this.elt.id);
 		// timeline.hour_idx = parseInt(this.elt.id.split("-")[1]);
 	}
 
-	this.placePlan = function(x, id){
-		var tmp = createDiv(x, height/2);
-		console.log("huh this is odd");
+	this.placePlan = function(x, id, name){
+		var tmp = createDiv(0, 0);
 		tmp.id(id);
+		tmp.html(name);
 		tmp.mouseClicked(this.movePlan);
-		tmp.class('timeline-holder');
-		// tmp.parent(timeline);
+		tmp.parent('timeline-holder');	
+
+		tmp.style('background-color', 'white');
+		tmp.style('height', '100%');
+		tmp.style('width', '15%');
+		tmp.style('padding', '0.5em');
+		tmp.style('display', 'inline-block');
+
+		// jQuery events
+		$('#'+id).draggable();
 	}
 
 

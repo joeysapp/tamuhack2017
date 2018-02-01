@@ -23,6 +23,7 @@ function init() {
     infowindow.open(map, marker);
   });
 
+  // This is used 
   autocomplete.addListener('place_changed', function() {
     infowindow.close();
     var place = autocomplete.getPlace();
@@ -62,7 +63,8 @@ function init() {
     var free_pos = (Math.random()*(width-50)).toString();
     var ct = plans.length;
     var div_id = "event-"+ct.toString();
-    var name_event = place.name.slice(0, 20);
+    var name_event = place.name.slice(0, 100);
+    console.log(place.name);
 
     // var unique_div_id = '<div id='.concat(div_id).concat('>').concat(name_event).concat('</div>');
 
@@ -71,7 +73,7 @@ function init() {
     // $('#'.concat(unique_div_id)).css("left",free_pos.concat("px"));
 
     // Doing this with p5!
-    timeline.placePlan(free_pos, div_id);
+    timeline.placePlan(free_pos, div_id, name_event);
 
     plans.push(div_id);
 
@@ -98,6 +100,9 @@ function init() {
       // }, function(data){
       //   console.log(data);
       // });
+
+      // Add a marker above the marker
+
 
 
   })
