@@ -76,7 +76,10 @@ function Timeline(t_x, t_y) {
 	}
 
 	this.display = function(){
-		rect(0, 0, this.c.width-1, this.c.height-1);
+		stroke(255);
+		strokeWeight(3);
+		fill(255, 2);
+		rect(0, 0, this.c.width, this.c.height);
 	
 		
 	}
